@@ -22,8 +22,15 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Install Ansible
-        run: sudo apt update && sudo apt install -y ansible
+      - name: Install Ansible if missing
+        run: |
+          if ! command -v ansible >/dev/null 2>&1; then
+            echo "Ansible not found—installing…"
+            sudo apt update
+            sudo apt install -y ansible
+          else
+            echo "Ansible already installed—skipping."
+          fi
 
       - name: Run Ansible playbook
         run: ansible-playbook -i inventory.ini site.yml
