@@ -33,8 +33,8 @@
     user: "{{ infrastructure_user }}"
     key: "{{ item }}"
     state: present
-  loop: "{{ infrastructure_pubkeys }}"
-  when: infrastructure_pubkeys is defined
+  loop: "{{ infrastructure_pubkeys | default([]) }}"
+  when: infrastructure_pubkeys is defined and (infrastructure_pubkeys | length) > 0
 
 - name: Configure sudoers for "{{ infrastructure_user }}"
   ansible.builtin.copy:
