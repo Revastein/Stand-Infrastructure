@@ -1,0 +1,31 @@
+---
+- name: Ensure UFW is installed
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Reset UFW to defaults
+  ansible.builtin.ufw:
+    state: reset
+
+- name: Deny all incoming connections by default
+  ansible.builtin.ufw:
+    rule: deny
+    direction: in
+
+- name: Allow all outgoing connections by default
+  ansible.builtin.ufw:
+    rule: allow
+    direction: out
+
+- name: Allow specific ports in UFW
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ ufw_allowed_ports }}"
+
+- name: Enable UFW
+  ansible.builtin.ufw:
+    state: enabled

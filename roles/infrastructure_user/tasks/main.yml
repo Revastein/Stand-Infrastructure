@@ -1,0 +1,46 @@
+---
+- name: Ensure group "{{ infrastructure_group }}" exists
+  ansible.builtin.group:
+    name: "{{ infrastructure_group }}"
+    state: present
+
+- name: Ensure user "{{ infrastructure_user }}" exists
+  ansible.builtin.user:
+    name: "{{ infrastructure_user }}"
+    group: "{{ infrastructure_group }}"
+    shell: /bin/bash
+    create_home: yes
+    home: "/home/{{ infrastructure_user }}"
+    state: present
+
+- name: Ensure .ssh directory exists for "{{ infrastructure_user }}"
+  ansible.builtin.file:
+    path: "/home/{{ infrastructure_user }}/.ssh"
+    state: directory
+    owner: "{{ infrastructure_user }}"
+    group: "{{ infrastructure_group }}"
+    mode: '0700'
+
+- name: Install controller public key for "{{ infrastructure_user }}"
+  ansible.builtin.authorized_key:
+    user: "{{ infrastructure_user }}"
+    state: present
+    key: "{{ lookup('file', role_path + '/files/ansible_deploy.pub') }}"
+
+- name: Install extra public keys for "{{ infrastructure_user }}"
+  no_log: true
+  ansible.builtin.authorized_key:
+    user: "{{ infrastructure_user }}"
+    key: "{{ item }}"
+    state: present
+  loop: "{{ infrastructure_pubkeys }}"
+  when: infrastructure_pubkeys is defined
+
+- name: Configure sudoers for "{{ infrastructure_user }}"
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ infrastructure_user }}"
+    content: |
+      {{ infrastructure_user }} ALL=(ALL) NOPASSWD: /usr/bin/docker, /usr/bin/docker-compose, /usr/bin/systemctl
+    owner: root
+    group: root
+    mode: '0440'
