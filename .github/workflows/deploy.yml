@@ -11,7 +11,7 @@ jobs:
     environment: production
 
     env:
-      VPS_HOST = ${{ secrets.VPS_HOST }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
 
     steps:
       - name: Checkout repo
