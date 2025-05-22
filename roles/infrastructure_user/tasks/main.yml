@@ -31,7 +31,14 @@
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ infrastructure_user }}"
     content: |
-      {{ infrastructure_user }} ALL=(ALL) NOPASSWD: /usr/bin/docker, /usr/bin/docker-compose, /usr/bin/systemctl
+      {{ infrastructure_user }} ALL=(ALL) NOPASSWD: \
+          /usr/bin/docker, \
+          /usr/bin/docker-compose, \
+          /usr/bin/systemctl, \
+          /usr/bin/apt-get, \
+          /usr/bin/apt, \
+          /usr/bin/ufw, \
+          /usr/bin/service
     owner: root
     group: root
     mode: '0440'
