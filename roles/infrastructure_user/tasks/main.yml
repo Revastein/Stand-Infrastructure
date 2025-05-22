@@ -27,15 +27,6 @@
     state: present
     key: "{{ lookup('file', role_path + '/files/ansible_deploy.pub') }}"
 
-- name: Install extra public keys for "{{ infrastructure_user }}"
-  no_log: true
-  ansible.builtin.authorized_key:
-    user: "{{ infrastructure_user }}"
-    key: "{{ item }}"
-    state: present
-  loop: "{{ infrastructure_pubkeys | default([]) }}"
-  when: infrastructure_pubkeys is defined and infrastructure_pubkeys | length > 0
-
 - name: Configure sudoers for "{{ infrastructure_user }}"
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ infrastructure_user }}"
