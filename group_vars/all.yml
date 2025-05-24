@@ -2,7 +2,7 @@
 infrastructure_user: infrastructure-agent
 infrastructure_group: docker
 infrastructure_pubkeys:
-  - "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+  - "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
 
 ssh_port: 2222
 
@@ -16,3 +16,8 @@ ufw_allowed_ports:
   - "{{ ssh_port }}"
   - 80
   - 443
+
+nginx_site_name: whilework
+server_name: whilework.it.com
+admin_email: info@whilework.it.com
+enable_https: true

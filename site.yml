@@ -18,3 +18,4 @@
     - fail2ban
     - docker
     - firewall
+    - nginx

@@ -1,10 +1,10 @@
 ---
-- name: Ensure group "{{ infrastructure_group }}" exists
+- name: Ensure group exists - {{ infrastructure_group }}
   ansible.builtin.group:
     name: "{{ infrastructure_group }}"
     state: present
 
-- name: Ensure user "{{ infrastructure_user }}" exists
+- name: Ensure user exists - {{ infrastructure_user }}
   ansible.builtin.user:
     name: "{{ infrastructure_user }}"
     group: "{{ infrastructure_group }}"

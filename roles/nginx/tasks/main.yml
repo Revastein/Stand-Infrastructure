@@ -1,0 +1,37 @@
+---
+- name: Install nginx & certbot
+  ansible.builtin.apt:
+    name:
+      - nginx
+      - python3-certbot-nginx
+    state: present
+    update_cache: true
+
+- name: Deploy site config
+  ansible.builtin.template:
+    src: whilework.conf.j2
+    dest: /etc/nginx/sites-available/{{ nginx_site_name }}.conf
+    mode: "0644"
+  notify: Reload nginx
+
+- name: Enable site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/{{ nginx_site_name }}.conf
+    dest: /etc/nginx/sites-enabled/{{ nginx_site_name }}.conf
+    state: link
+  notify: Reload nginx
+
+- name: Ensure nginx started
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Obtain/renew certificates
+  when: enable_https
+  ansible.builtin.command: >
+    certbot --nginx --non-interactive --agree-tos
+            -m {{ admin_email }}
+            -d {{ server_name }}
+            --redirect
+  notify: Reload nginx
