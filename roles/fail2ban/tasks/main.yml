@@ -18,15 +18,3 @@
     name: fail2ban
     state: started
     enabled: true
-
-- name: Enable nginx-http-auth jail
-  ansible.builtin.lineinfile:
-    path: /etc/fail2ban/jail.local
-    insertafter: EOF
-    line: |
-      [nginx-http-auth]
-      enabled = true
-      filter  = nginx-http-auth
-      logpath = /var/log/nginx/error.log
-      maxretry = 5
-  notify: Restart fail2ban

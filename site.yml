@@ -14,8 +14,8 @@
 
   roles:
     - common
+    - firewall
     - sshd
     - fail2ban
     - docker
-    - firewall
     - nginx

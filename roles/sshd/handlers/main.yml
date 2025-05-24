@@ -1,5 +1,20 @@
 ---
 - name: Restart ssh
-  ansible.builtin.service:
+  service:
     name: ssh
     state: restarted
+
+- name: Test new SSH port
+  wait_for:
+    port: "{{ ssh_port }}"
+    timeout: 5
+  listen: Test new SSH port
+  failed_when: false
+  notify: Close port 22 if ok
+
+- name: Close port 22 if ok
+  community.general.ufw:
+    rule: delete
+    port: 22
+    proto: tcp
+  listen: Close port 22 if ok
