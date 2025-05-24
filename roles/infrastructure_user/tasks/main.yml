@@ -9,7 +9,7 @@
     name: "{{ infrastructure_user }}"
     group: "{{ infrastructure_group }}"
     shell: /bin/bash
-    create_home: yes
+    create_home: true
     home: "/home/{{ infrastructure_user }}"
     state: present
 
@@ -19,10 +19,10 @@
     state: directory
     owner: "{{ infrastructure_user }}"
     group: "{{ infrastructure_group }}"
-    mode: '0700'
+    mode: "0700"
 
 - name: Install controller public key for "{{ infrastructure_user }}"
-  ansible.builtin.authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ infrastructure_user }}"
     state: present
     key: "{{ lookup('file', role_path + '/files/ansible_deploy.pub') }}"
@@ -34,5 +34,5 @@
       {{ infrastructure_user }} ALL=(ALL) NOPASSWD: ALL
     owner: root
     group: root
-    mode: '0440'
-    validate: 'visudo -cf %s'
+    mode: "0440"
+    validate: "visudo -cf %s"

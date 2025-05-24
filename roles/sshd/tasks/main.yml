@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name: openssh-server
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Deploy custom sshd_config
   ansible.builtin.template:
@@ -11,6 +11,5 @@
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
-    mode: '0600'
+    mode: "0600"
   notify: Restart ssh
-

@@ -3,29 +3,29 @@
   ansible.builtin.apt:
     name: ufw
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Reset UFW to defaults
-  ansible.builtin.ufw:
+  community.general.ufw:
     state: reset
 
 - name: Deny all incoming connections by default
-  ansible.builtin.ufw:
+  community.general.ufw:
     rule: deny
     direction: in
 
 - name: Allow all outgoing connections by default
-  ansible.builtin.ufw:
+  community.general.ufw:
     rule: allow
     direction: out
 
 - name: Allow specific ports in UFW
-  ansible.builtin.ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
   loop: "{{ ufw_allowed_ports }}"
 
 - name: Enable UFW
-  ansible.builtin.ufw:
+  community.general.ufw:
     state: enabled

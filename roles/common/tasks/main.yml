@@ -6,4 +6,4 @@
       - git
     state: present
     update_cache: true
-  tags: [ install, common ]
+  tags: [install, common]
