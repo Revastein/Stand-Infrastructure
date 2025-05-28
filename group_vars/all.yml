@@ -1,23 +1,6 @@
----
-infrastructure_user: infrastructure-agent
-infrastructure_group: docker
-infrastructure_pubkeys:
-  - "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+ansible_user: deploy
+ansible_python_interpreter: /usr/bin/python3
 
-ssh_port: 2222
-
-fail2ban:
-  dest_email: root@localhost
-  maxretry: 5
-  bantime: 600
-  findtime: 600
-
-ufw_allowed_ports:
-  - "{{ ssh_port }}"
-  - 80
-  - 443
-
-nginx_site_name: whilework
-server_name: whilework.it.com
-admin_email: info@whilework.it.com
-enable_https: true
+timezone: Asia/Tbilisi
+infrastructure_user: deploy
+allowed_http_ports: [ 80, 443 ]

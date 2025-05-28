@@ -1,0 +1,11 @@
+profiles:
+  - production
+
+skip_list:
+  - experimental
+
+warn_list:
+  - no-changed-when
+
+parseable: true
+verbosity: 1

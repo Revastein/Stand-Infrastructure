@@ -1,31 +1,24 @@
 ---
-- name: Ensure UFW is installed
-  ansible.builtin.apt:
+- name: Install UFW
+  apt:
     name: ufw
     state: present
-    update_cache: true
 
-- name: Set default policies
-  community.general.ufw:
-    direction: "{{ item.direction }}"
-    policy:    "{{ item.policy }}"
-  loop:
-    - { direction: in,  policy: deny }
-    - { direction: out, policy: allow }
+- name: Allow SSH (22/tcp)
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
 
-- name: Ensure allowed ports
-  community.general.ufw:
+- name: Allow HTTP/HTTPS
+  ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
-  loop: "{{ ufw_allowed_ports }}"
+  loop: "{{ allowed_http_ports }}"
 
-- name: Limit SSH brute-force
-  community.general.ufw:
-    rule: limit
-    port: "{{ ssh_port }}"
-    proto: tcp
-
-- name: Enable UFW
-  community.general.ufw:
+- name: Set default policies
+  ufw:
     state: enabled
+    policy: deny
+  notify: reload ufw

@@ -1,0 +1,17 @@
+---
+- name: Bootstrap & system setup
+  hosts: vps
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - common
+    - user_management
+
+- name: Docker & Firewall as deploy
+  hosts: vps
+  remote_user: "{{ infrastructure_user }}"
+  become: true
+  gather_facts: no
+  roles:
+    - docker_setup
+    - firewall

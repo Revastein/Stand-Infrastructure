@@ -1,0 +1,26 @@
+---
+- name: Ensure group "deploy" exists
+  group:
+    name: "{{ infrastructure_user }}"
+    state: present
+
+- name: Create user "deploy"
+  user:
+    name: "{{ infrastructure_user }}"
+    group: "{{ infrastructure_user }}"
+    shell: /bin/bash
+    create_home: true
+
+- name: Authorize SSH key for deploy
+  authorized_key:
+    user: "{{ infrastructure_user }}"
+    state: present
+    key: "{{ lookup('file', 'deploy.pub') }}"
+
+- name: Add deploy to sudoers (NOPASSWD)
+  copy:
+    dest: "/etc/sudoers.d/{{ infrastructure_user }}"
+    content: "{{ infrastructure_user }} ALL=(ALL) NOPASSWD: ALL\n"
+    owner: root
+    group: root
+    mode: '0440'

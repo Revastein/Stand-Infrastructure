@@ -1,9 +1,18 @@
 ---
-- name: Install base packages
-  ansible.builtin.apt:
-    name:
-      - curl
-      - git
-    state: present
+- name: Apt update / upgrade
+  apt:
     update_cache: true
-  tags: [install, common]
+    upgrade: dist
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Install base packages
+  apt:
+    name:
+      - git
+      - curl
+      - htop
+      - fail2ban
+    state: present
